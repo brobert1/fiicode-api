@@ -1,0 +1,60 @@
+{
+  "name": "name",
+  "version": "1.0.0",
+  "description": "description",
+  "main": "server.js",
+  "scripts": {
+    "build": "node scripts/next.js build",
+    "dev": "node scripts/next.js dev",
+    "seed": "node scripts/next.js seed",
+    "start": "node scripts/next.js build && node scripts/next.js start",
+    "test": "node scripts/next.js test"
+  },
+  "keywords": [
+    "express",
+    "mongo",
+    "mongodb",
+    "api starter"
+  ],
+  "author": "author",
+  "license": "MIT",
+  "engines": {
+    "node": "^22.11.0 || ^20",
+    "npm": "^10.9.0 || ^10"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "date-fns": "^2.23.0",
+    "diacritic-regex": "^1.2.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-async-errors": "^3.1.1",
+    "express-fileupload": "^1.4.0",
+    "express-goodies": "^2.0.0",
+    "helmet": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.8.4",
+    "pino": "^6.13.1",
+    "postmark": "^4.0.2",
+    "validator": "^13.6.0",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.1",
+    "@babel/core": "^7.24.1",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.24.1",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.57.1",
+    "handlebars": "^4.7.8",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "pino-pretty": "^4.8.0",
+    "prettier": "^2.3.2"
+  }
+}

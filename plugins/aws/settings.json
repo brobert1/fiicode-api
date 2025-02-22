@@ -1,0 +1,10 @@
+{
+  "name": "plugins/aws",
+  "version": "1.0.0",
+  "bucket": "chesscoders",
+  "folder": {
+    "development": "one-aml-beta",
+    "production": "one-aml"
+  },
+  "region": "fra1"
+}

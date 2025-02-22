@@ -1,0 +1,9 @@
+# Ignore artifacts:
+build
+coverage
+
+# Ignore all HTML files:
+**/*.html
+
+# Ignore all JSON files in the postman directory:
+/postman/*.json
