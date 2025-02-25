@@ -12,7 +12,6 @@ module.exports = async (req, res) => {
   if (!identity) {
     try {
       identity = await Client.create({
-        name: 'test',
         email,
         active: true,
         confirmed: true,
@@ -23,9 +22,9 @@ module.exports = async (req, res) => {
   }
 
   // the JWT public data payload
-  const { name, id, __t: role } = identity;
+  const { id, __t: role } = identity;
 
-  const payload = { name, email, role, me: id };
+  const payload = { email, role, me: id };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: '15m',

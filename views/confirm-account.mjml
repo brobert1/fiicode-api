@@ -1,0 +1,74 @@
+<mjml>
+  <mj-body background-color="#ffffff">
+    <mj-section
+      background-url="https://practica.ase.ro/api/public/assets/background.jpg"
+      padding-bottom="20px"
+      padding-top="20px"
+    >
+      <mj-column vertical-align="top" width="100%">
+        <mj-image
+          src="https://practica.ase.ro/api/public/assets/logo.png"
+          alt="Logo"
+          align="center"
+          border="none"
+          width="175px"
+          padding="10px"
+        ></mj-image>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#f3f4f6" padding-bottom="20px" padding-top="20px">
+      <mj-column vertical-align="middle" width="100%">
+        <mj-text
+          align="left"
+          color="#22409a"
+          font-size="18px"
+          font-weight="bold"
+          font-family="Libre Baskerville, Arial, sans-serif"
+          >Hello, {{username}}</mj-text
+        >
+        <mj-text
+          align="left"
+          color="#4b5563"
+          font-size="14px"
+          font-family="Noto Sans JP, Arial, sans-serif"
+          line-height="20px"
+        >
+          <p>Welcome to Pathly, your personal guide to smarter urban mobility! 🚀</p>
+          <p>
+            You’re just one step away from unlocking a seamless, eco-friendly way to navigate the
+            city.
+          </p>
+        </mj-text>
+        <mj-button
+          href="{{platformLink}}"
+          align="center"
+          font-size="16px"
+          font-weight="bold"
+          background-color="#2564eb"
+          border-radius="6px"
+          color="#ffffff"
+          font-family="Noto Sans JP, Arial, sans-serif"
+          >Confirm account</mj-button
+        >
+        <mj-text
+          align="left"
+          color="#4b5563"
+          font-size="14px"
+          font-family="Noto Sans JP, Arial, sans-serif"
+          line-height="20px"
+        >
+          Let’s move smarter, together. 🌱
+        </mj-text>
+        <mj-text
+          align="left"
+          color="#4b5563"
+          font-size="14px"
+          font-family="Noto Sans JP, Arial, sans-serif"
+          line-height="20px"
+        >
+          <b>The Pathly Team</b>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

@@ -1,4 +1,5 @@
 import { error } from '@functions';
+import { sendConfirmationEmail } from '@functions/notify-client';
 import { Client, Identity } from '@models';
 import jwt from 'jsonwebtoken';
 
@@ -15,12 +16,7 @@ export default async (req, res) => {
     throw error(400, 'Could not create your new account');
   }
 
-  // // Send a welcome email
-  // await sendEmail({
-  //   to: email,
-  //   subject: 'A warm welcome to our chess platform',
-  //   type: 'signup',
-  // });
+  await sendConfirmationEmail({ client: document });
 
   // Also send the JWT token to authenticate the user
   const { id, name, __t: role } = document;

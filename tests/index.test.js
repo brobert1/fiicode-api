@@ -4,6 +4,7 @@ import awsTest from './aws.test';
 import netopiaTest from './netopia.test';
 import postmarkTest from './postmark.test';
 import smartbillTest from './smartbill.test';
+import sendgridTest from './sendgrid.test';
 
 describe('Test Postmark plugin', function () {
   postmarkTest();
@@ -19,4 +20,8 @@ describe('Test Smartbill plugin', function () {
 
 describe('Test AWS plugin', function () {
   awsTest();
+});
+
+describe('Test Sendgrid', function () {
+  sendgridTest();
 });
