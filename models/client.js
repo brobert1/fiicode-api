@@ -16,6 +16,10 @@ const schema = new Schema({
   dateOfBirth: {
     type: Date,
   },
+  hasPreferences: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 export default Identity.discriminator(name, schema);
