@@ -10,7 +10,6 @@ const schema = new Schema(
   {
     name: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
@@ -21,7 +20,6 @@ const schema = new Schema(
     },
     password: {
       type: String,
-      required: true,
       minlength: 8,
       select: false,
     },
@@ -42,6 +40,11 @@ const schema = new Schema(
     },
     lastLoginAt: {
       type: Date,
+    },
+    profile: {
+      name: String,
+      path: String,
+      size: Number,
     },
   },
   { autoCreate: false, timestamps: true }
