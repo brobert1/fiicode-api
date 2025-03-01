@@ -19,6 +19,7 @@ export default async () => {
       password: bcrypt.hashSync('supersecretpassword'),
       active: true,
       confirmed: true,
+      xp: 1500,
     },
     {
       email: 'pam@email.com',
@@ -28,6 +29,7 @@ export default async () => {
       password: bcrypt.hashSync('supersecretpassword'),
       active: true,
       confirmed: false,
+      xp: 1500,
     },
   ];
 };

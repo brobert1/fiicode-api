@@ -20,6 +20,10 @@ const schema = new Schema({
     type: Boolean,
     default: false,
   },
+  xp: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export default Identity.discriminator(name, schema);
