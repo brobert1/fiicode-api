@@ -24,6 +24,10 @@ const schema = new Schema({
     type: Number,
     default: 0,
   },
+  type: {
+    type: String,
+    enum: ['google', 'default'],
+  },
 });
 
 export default Identity.discriminator(name, schema);

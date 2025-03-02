@@ -11,7 +11,8 @@ export default async (req, res) => {
   }
 
   // Create a new account
-  const document = await Client.create(req.body);
+  const clientPayload = { ...req.body, type: 'default' };
+  const document = await Client.create(clientPayload);
   if (!document) {
     throw error(400, 'Could not create your new account');
   }

@@ -9,12 +9,17 @@ module.exports = async (req, res) => {
   }
 
   let identity = await Identity.findOne({ email });
+
   if (!identity) {
     try {
+      const name = email.split('@')[0].trim();
+
       identity = await Client.create({
         email,
+        name,
         active: true,
         confirmed: true,
+        type: 'google',
       });
     } catch (error) {
       console.error('Error making POST request:', error);
@@ -24,7 +29,14 @@ module.exports = async (req, res) => {
   // the JWT public data payload
   const { id, __t: role, hasPreferences } = identity;
 
-  const payload = { email, role, me: id, hasPreferences };
+  // Include name in the payload if available
+  const payload = {
+    email,
+    role,
+    me: id,
+    hasPreferences,
+    name: identity.name,
+  };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: '15m',
@@ -52,5 +64,8 @@ module.exports = async (req, res) => {
   // Add last login information to the current user
   await identity.updateOne({ lastLoginAt: Date.now() });
 
-  return res.status(200).json({ token, message: 'Authentication successful' });
+  return res.status(200).json({
+    token,
+    message: 'Authentication successful',
+  });
 };
