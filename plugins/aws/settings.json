@@ -1,10 +1,10 @@
 {
   "name": "plugins/aws",
   "version": "1.0.0",
-  "bucket": "chesscoders",
+  "bucket": "fiicode",
   "folder": {
-    "development": "one-aml-beta",
-    "production": "one-aml"
+    "development": "pathly",
+    "production": "pathly"
   },
-  "region": "fra1"
+  "region": "nyc3"
 }

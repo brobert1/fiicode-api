@@ -41,7 +41,7 @@ const schema = new Schema(
     lastLoginAt: {
       type: Date,
     },
-    profile: {
+    image: {
       name: String,
       path: String,
       size: Number,

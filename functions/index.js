@@ -6,6 +6,9 @@ export { default as safeNumber } from 'express-goodies/functions/safe-number';
 export { default as safeString } from 'express-goodies/functions/safe-string';
 
 // Export the functions
+export { default as cleanupFiles } from './cleanup-files';
 export { default as notifyClient } from './notify-client';
 export { default as randomHash } from './random-hash';
 export { default as removeRefreshTokenCookie } from './remove-refresh-token-cookie';
+export { default as uploadDocument } from './upload-document';
+export { default as uploadFiles } from './upload-files';
