@@ -5,7 +5,7 @@ const {
   DeleteObjectCommand,
   GetObjectCommand,
 } = require('@aws-sdk/client-s3');
-const settings = require('../settings.json');
+const settings = require('../settings.js');
 
 const s3Client = new S3Client({
   endpoint: `https://${settings.region}.digitaloceanspaces.com`,
