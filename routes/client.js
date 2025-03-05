@@ -19,3 +19,6 @@ router.delete('/client/account/image', Client.removeImage);
 router.put('/client/account', Client.updateAccount);
 router.delete('/client/remove', Client.removeAccount);
 router.post('/client/change-password', Client.changePassword);
+
+// Partners
+router.get('/client/partners', Client.listPartners);

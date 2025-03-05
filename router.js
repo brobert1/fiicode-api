@@ -21,11 +21,11 @@ router.use(middleware.testError);
 router.use(middleware.testLoading);
 
 // use the router instances defined
+router.use(routes.admin);
 router.use(routes.client);
 router.use(routes.clientError);
 router.use(routes.identity);
 router.use(routes.public);
-
 // Matches any other HTTP method and route not matched before
 router.all('*', middleware.notFound);
 
