@@ -5,6 +5,7 @@ import fileUpload from 'express-fileupload';
 import { connectToMongo, setupCors } from 'express-goodies';
 import helmet from 'helmet';
 import router from './router';
+import removeAlerts from 'crons/remove-alerts';
 
 const app = express();
 
@@ -23,5 +24,8 @@ app.use(setupCors());
 
 // Route everything
 app.use(router);
+
+// Cron jobs
+removeAlerts().start();
 
 export default app;

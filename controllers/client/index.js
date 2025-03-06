@@ -1,8 +1,10 @@
 export { default as account } from './account';
 export { default as addPreferences } from './add-preferences';
 export { default as changePassword } from './change-password';
+export { default as listAlerts } from './list-alerts';
 export { default as listPartners } from './list-partners';
 export { default as removeAccount } from './remove-account';
 export { default as removeImage } from './remove-image';
+export { default as setAlert } from './set-alert';
 export { default as updateAccount } from './update-account';
 export { default as uploadImage } from './upload-image';

@@ -1,0 +1,36 @@
+import { model, Schema } from 'mongoose';
+
+/**
+ * Alerts are reported by the clients or admin
+ */
+const name = 'alert';
+const schema = new Schema(
+  {
+    location: {
+      latitude: {
+        type: Number,
+      },
+      longitude: {
+        type: Number,
+      },
+      address: {
+        type: String,
+      },
+    },
+    reportedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'identity',
+    },
+    type: {
+      type: String,
+      enum: ['accident', 'construction', 'congestion', 'other'],
+    },
+    expiresAt: {
+      type: Date,
+      default: () => new Date(Date.now() + 10 * 60 * 1000), // Default 10 minutes from now
+    },
+  },
+  { autoCreate: false, timestamps: true }
+);
+
+export default model(name, schema);

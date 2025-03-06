@@ -22,3 +22,7 @@ router.post('/client/change-password', Client.changePassword);
 
 // Partners
 router.get('/client/partners', Client.listPartners);
+
+// Alerts
+router.post('/client/set-alert', Client.setAlert);
+router.get('/client/alerts', Client.listAlerts);
