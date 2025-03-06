@@ -30,6 +30,7 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "cron": "^4.1.0",
     "date-fns": "^2.23.0",
     "diacritic-regex": "^1.2.0",
     "dotenv": "^16.4.7",

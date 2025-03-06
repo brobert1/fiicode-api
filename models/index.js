@@ -1,4 +1,5 @@
 export { default as Admin } from './admin';
+export { default as Alert } from './alert';
 export { default as Badge } from './badge';
 export { default as Client } from './client';
 export { default as Confirm } from './confirm';
