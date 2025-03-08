@@ -6,5 +6,6 @@ export { default as listPartners } from './list-partners';
 export { default as removeAccount } from './remove-account';
 export { default as removeImage } from './remove-image';
 export { default as setAlert } from './set-alert';
+export { default as setFCMToken } from './set-fcm-token';
 export { default as updateAccount } from './update-account';
 export { default as uploadImage } from './upload-image';

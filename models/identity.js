@@ -1,6 +1,7 @@
 import { formatEmail, hashPasswords, paginate, validate } from 'express-goodies/mongoose';
 import { model, Schema } from 'mongoose';
 import validator from 'validator';
+import { fcmToken } from './schemas';
 
 /**
  * Identities manage login related operations
@@ -46,6 +47,7 @@ const schema = new Schema(
       path: String,
       size: Number,
     },
+    fcmTokens: [fcmToken],
   },
   { autoCreate: false, timestamps: true }
 );

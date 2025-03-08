@@ -26,3 +26,6 @@ router.get('/client/partners', Client.listPartners);
 // Alerts
 router.post('/client/set-alert', Client.setAlert);
 router.get('/client/alerts', Client.listAlerts);
+
+// FCM Token
+router.put('/client/set-fcm-token', Client.setFCMToken);
