@@ -1,6 +1,5 @@
 import { error } from '@functions';
 import { Identity, Alert } from '@models';
-import { addMinutes } from 'date-fns';
 
 export default async (req, res) => {
   const { me } = req.user;
@@ -18,28 +17,11 @@ export default async (req, res) => {
     reportedBy: me,
   };
 
-  // Check if there's an existing alert with the same address and type
-  const existingAlert = await Alert.findOne({
-    'location.address': payload.location.address,
-    type: payload.type,
-  });
+  // Create a new alert regardless of duplicates
+  const result = await Alert.create(payload);
 
-  let result;
+  identity.xp += 100;
+  await identity.save();
 
-  if (existingAlert) {
-    // If an alert exists, extend its expiration time by 5 minutes
-    existingAlert.expiresAt = addMinutes(existingAlert.expiresAt, 5);
-    result = await existingAlert.save();
-
-    identity.xp += 100;
-    await identity.save();
-
-    res.status(200).json({ message: 'Alert updated successfully', alert: result });
-  } else {
-    result = await Alert.create(payload);
-    identity.xp += 100;
-    await identity.save();
-
-    res.status(201).json({ message: 'Alert set successfully', alert: result });
-  }
+  res.status(201).json({ message: 'Alert set successfully', alert: result });
 };
