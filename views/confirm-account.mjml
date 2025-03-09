@@ -1,18 +1,14 @@
 <mjml>
   <mj-body background-color="#ffffff">
-    <mj-section
-      background-url="https://practica.ase.ro/api/public/assets/background.jpg"
-      padding-bottom="20px"
-      padding-top="20px"
-    >
+    <mj-section background-color="#7eec00" padding-bottom="20px" padding-top="20px">
       <mj-column vertical-align="top" width="100%">
         <mj-image
-          src="https://practica.ase.ro/api/public/assets/logo.png"
+          src="https://pathly-w8x2r.ondigitalocean.app/images/logo.png"
           alt="Logo"
           align="center"
           border="none"
-          width="175px"
-          padding="10px"
+          width="200px"
+          padding="12px"
         ></mj-image>
       </mj-column>
     </mj-section>
@@ -20,7 +16,7 @@
       <mj-column vertical-align="middle" width="100%">
         <mj-text
           align="left"
-          color="#22409a"
+          color="#0080ff"
           font-size="18px"
           font-weight="bold"
           font-family="Libre Baskerville, Arial, sans-serif"
@@ -44,9 +40,9 @@
           align="center"
           font-size="16px"
           font-weight="bold"
-          background-color="#2564eb"
+          background-color="#7eec00"
           border-radius="6px"
-          color="#ffffff"
+          color="#0080ff"
           font-family="Noto Sans JP, Arial, sans-serif"
           >Confirm account</mj-button
         >
