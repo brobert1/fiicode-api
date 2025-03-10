@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 import Identity from './identity';
+import { favouritePlaces } from './schemas';
 
 /**
  * Clients are normal accounts with no extended permissions
@@ -28,6 +29,7 @@ const schema = new Schema({
     type: String,
     enum: ['google', 'default'],
   },
+  favouritePlaces: [favouritePlaces],
 });
 
 export default Identity.discriminator(name, schema);
