@@ -1,9 +1,12 @@
 export { default as account } from './account';
+export { default as addFavouritePlace } from './add-favourite-place';
 export { default as addPreferences } from './add-preferences';
 export { default as changePassword } from './change-password';
+export { default as getFavouritePlaces } from './get-favourite-places';
 export { default as listAlerts } from './list-alerts';
 export { default as listPartners } from './list-partners';
 export { default as removeAccount } from './remove-account';
+export { default as removeFavouritePlace } from './remove-favourite-place';
 export { default as removeImage } from './remove-image';
 export { default as setAlert } from './set-alert';
 export { default as setFCMToken } from './set-fcm-token';

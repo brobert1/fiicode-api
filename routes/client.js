@@ -29,3 +29,8 @@ router.get('/client/alerts', Client.listAlerts);
 
 // FCM Token
 router.put('/client/set-fcm-token', Client.setFCMToken);
+
+// Favourite Places
+router.post('/client/add-favourite-place', Client.addFavouritePlace);
+router.get('/client/favourite-places', Client.getFavouritePlaces);
+router.put('/client/remove-favourite-place', Client.removeFavouritePlace);
