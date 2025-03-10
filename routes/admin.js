@@ -11,3 +11,6 @@ router.all('/admin/*', middleware.authenticate, middleware.authorize('admin'));
 
 router.get('/admin/partners', Admin.listPartners);
 router.post('/admin/partners', Admin.addPartner);
+
+
+router.get('/admin/clients', Admin.listClients);
