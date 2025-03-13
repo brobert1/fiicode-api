@@ -1,6 +1,6 @@
 import { createNotification, error } from '@functions';
 import { Identity, Alert, Notification } from '@models';
-import { admin } from '../../firebase';
+const { admin } = require('firebase');
 
 export default async (req, res) => {
   const { me } = req.user;
