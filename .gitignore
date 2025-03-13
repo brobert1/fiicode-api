@@ -5,8 +5,6 @@ yarn.lock
 .idea
 .DS_Store
 
-# Firebase service account key
-service_key.json
 
 # Logs
 logs
