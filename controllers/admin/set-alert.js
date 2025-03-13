@@ -46,6 +46,26 @@ export default async (req, res) => {
                   title: notification.title,
                   body: notification.body,
                 },
+                data: {
+                  notificationType: 'alert',
+                  alertId: result._id.toString(),
+                  alertType: result.type,
+                  address: result.location.address,
+                  timestamp: new Date().toISOString()
+                },
+                android: {
+                  priority: "high",
+                  notification: {
+                    sound: "default"
+                  }
+                },
+                apns: {
+                  payload: {
+                    aps: {
+                      sound: "default"
+                    }
+                  }
+                },
                 token: tokenObj.token,
               });
             }
