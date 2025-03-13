@@ -5,3 +5,4 @@ const router = Router();
 module.exports = router;
 
 router.get('/badges', Public.listBadges);
+router.get('/alerts', Public.listAlerts);

@@ -4,6 +4,7 @@ export { default as addPreferences } from './add-preferences';
 export { default as changePassword } from './change-password';
 export { default as getFavouritePlaces } from './get-favourite-places';
 export { default as listAlerts } from './list-alerts';
+export { default as listNotifications } from './list-notifications';
 export { default as listPartners } from './list-partners';
 export { default as removeAccount } from './remove-account';
 export { default as removeFavouritePlace } from './remove-favourite-place';

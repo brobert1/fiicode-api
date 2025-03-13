@@ -14,3 +14,9 @@ router.post('/admin/partners', Admin.addPartner);
 
 
 router.get('/admin/clients', Admin.listClients);
+
+router.get('/admin/alerts', Admin.listAlerts);
+router.post('/admin/set-alert', Admin.setAlert);
+router.delete('/admin/alerts/:id', Admin.deleteAlert);
+
+router.get('/admin/stats', Admin.getStats);
