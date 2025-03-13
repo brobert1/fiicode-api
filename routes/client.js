@@ -34,3 +34,6 @@ router.put('/client/set-fcm-token', Client.setFCMToken);
 router.post('/client/add-favourite-place', Client.addFavouritePlace);
 router.get('/client/favourite-places', Client.getFavouritePlaces);
 router.put('/client/remove-favourite-place', Client.removeFavouritePlace);
+
+// Notifications
+router.get('/client/notifications', Client.listNotifications);

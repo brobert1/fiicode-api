@@ -1,3 +1,4 @@
+import { paginate } from 'express-goodies/mongoose';
 import { model, Schema } from 'mongoose';
 
 /**
@@ -32,5 +33,7 @@ const schema = new Schema(
   },
   { autoCreate: false, timestamps: true }
 );
+
+schema.plugin(paginate);
 
 export default model(name, schema);

@@ -7,6 +7,8 @@ export { default as safeString } from 'express-goodies/functions/safe-string';
 
 // Export the functions
 export { default as cleanupFiles } from './cleanup-files';
+export { default as createNotification } from './create-notification-body';
+export { default as getCongestionDescription } from './get-congestion-description';
 export { default as notifyClient } from './notify-client';
 export { default as randomHash } from './random-hash';
 export { default as removeRefreshTokenCookie } from './remove-refresh-token-cookie';
