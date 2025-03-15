@@ -23,3 +23,6 @@ router.delete('/admin/alerts/:id', Admin.deleteAlert);
 
 // Stats
 router.get('/admin/stats', Admin.getStats);
+
+// Custom Routes
+router.post('/admin/custom-routes', Admin.addCustomRoute);

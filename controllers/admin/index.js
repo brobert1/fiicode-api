@@ -1,3 +1,4 @@
+export { default as addCustomRoute } from './add-custom-route';
 export { default as addPartner } from './add-partner';
 export { default as deleteAlert } from './delete-alert';
 export { default as getStats } from './get-stats';
