@@ -1,5 +1,5 @@
 import { createNotification, error } from '@functions';
-import { Identity, Alert, Notification } from '@models';
+import { Identity, Alert, AlertNotification } from '@models';
 import admin from 'firebase';
 
 export default async (req, res) => {
@@ -30,7 +30,7 @@ export default async (req, res) => {
       alert: result._id,
     };
 
-    await Notification.create(notificationPayload);
+    await AlertNotification.create(notificationPayload);
 
     try {
       const identities = await Identity.find({ 'fcmTokens.0': { $exists: true } });

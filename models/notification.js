@@ -12,13 +12,6 @@ const schema = new Schema(
     body: {
       type: String,
     },
-    type: {
-      type: String,
-    },
-    alert: {
-      type: Schema.Types.ObjectId,
-      ref: 'Alert',
-    },
   },
   { timestamps: true }
 );

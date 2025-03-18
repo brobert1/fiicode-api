@@ -37,3 +37,18 @@ router.put('/client/remove-favourite-place', Client.removeFavouritePlace);
 
 // Notifications
 router.get('/client/notifications', Client.listNotifications);
+
+// Identities
+router.get('/client/identities', Client.listIdentities);
+
+// Friend Requests
+router.get('/client/friend-requests', Client.listFriendRequests);
+router.post('/client/send-friend-request', Client.sendFriendRequest);
+router.put('/client/approve-friend-request/:id', Client.approveFriendRequest);
+router.delete('/client/reject-friend-request/:id', Client.rejectFriendRequest);
+
+// Friends
+router.get('/client/friends', Client.listFriends);
+
+// Location
+router.put('/client/update-location', Client.updateLocation);

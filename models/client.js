@@ -30,6 +30,20 @@ const schema = new Schema({
     enum: ['google', 'default'],
   },
   favouritePlaces: [favouritePlaces],
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'client',
+    },
+  ],
+  lastLocation: {
+    lat: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
+  },
 });
 
 export default Identity.discriminator(name, schema);
