@@ -46,6 +46,7 @@
     "pino": "^6.13.1",
     "postmark": "^4.0.2",
     "validator": "^13.6.0",
+    "ws": "^8.18.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {

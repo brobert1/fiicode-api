@@ -7,7 +7,11 @@ export default async (req, res) => {
     throw error(404, 'Missing required params');
   }
 
-  const identity = await Client.findById(me).populate('friends');
+  const identity = await Client.findById(me).populate({
+    path: 'friends',
+    select: 'name email image lastLocation lastLoginAt isOnline'
+  });
+
   if (!identity) {
     throw error(404, 'Identity not found');
   }

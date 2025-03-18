@@ -44,6 +44,10 @@ const schema = new Schema({
       type: Number,
     },
   },
+  isOnline: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 export default Identity.discriminator(name, schema);

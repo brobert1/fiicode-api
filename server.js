@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { createServer } from 'http';
 import pino from 'pino';
 import app from './app';
+import { initWebSocketServer } from './services/websocket';
 
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 
@@ -15,6 +16,11 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
  * Create HTTP server.
  */
 const server = createServer(app);
+
+/**
+ * Initialize WebSocket server
+ */
+initWebSocketServer(server);
 
 /**
  * Get port from environment and store in Express.
