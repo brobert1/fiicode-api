@@ -36,6 +36,14 @@ const schema = new Schema({
       ref: 'client',
     },
   ],
+  lastLocation: {
+    lat: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
+  },
 });
 
 export default Identity.discriminator(name, schema);

@@ -18,4 +18,5 @@ export { default as sendFriendRequest } from './send-friend-request';
 export { default as setAlert } from './set-alert';
 export { default as setFCMToken } from './set-fcm-token';
 export { default as updateAccount } from './update-account';
+export { default as updateLocation } from './update-location';
 export { default as uploadImage } from './upload-image';

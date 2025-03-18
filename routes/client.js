@@ -49,3 +49,6 @@ router.delete('/client/reject-friend-request/:id', Client.rejectFriendRequest);
 
 // Friends
 router.get('/client/friends', Client.listFriends);
+
+// Location
+router.put('/client/update-location', Client.updateLocation);
