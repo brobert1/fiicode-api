@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Server } from 'ws';
 import jwt from 'jsonwebtoken';
 import { Client } from '../models';
@@ -43,7 +44,7 @@ export const initWebSocketServer = (server) => {
       // Update user's online status and last activity time
       await Client.findByIdAndUpdate(userId, {
         isOnline: true,
-        lastActiveAt: new Date()
+        lastActiveAt: new Date(),
       });
 
       // Send initial online status to all friends
@@ -56,7 +57,7 @@ export const initWebSocketServer = (server) => {
           if (data.type === 'heartbeat') {
             // Update last activity time
             await Client.findByIdAndUpdate(userId, {
-              lastActiveAt: new Date()
+              lastActiveAt: new Date(),
             });
           }
         } catch (error) {
@@ -83,7 +84,6 @@ export const initWebSocketServer = (server) => {
 
       // Send initial friend status to this user
       await sendFriendsStatusToUser(userId);
-
     } catch (error) {
       console.error('WebSocket authentication error:', error);
       ws.close(1008, 'Authentication failed');
@@ -103,7 +103,7 @@ async function checkInactiveUsers() {
     // Find active users who haven't had activity in the timeout period
     const inactiveUsers = await Client.find({
       isOnline: true,
-      lastActiveAt: { $lt: cutoffTime }
+      lastActiveAt: { $lt: cutoffTime },
     });
 
     // Mark them as offline and notify friends
@@ -132,11 +132,13 @@ async function sendOnlineStatusToFriends(userId) {
     for (const friendId of user.friends) {
       const friendWs = clients.get(friendId.toString());
       if (friendWs && friendWs.readyState === friendWs.OPEN) {
-        friendWs.send(JSON.stringify({
-          type: 'status_update',
-          userId: userId,
-          isOnline: true
-        }));
+        friendWs.send(
+          JSON.stringify({
+            type: 'status_update',
+            userId: userId,
+            isOnline: true,
+          })
+        );
       }
     }
   } catch (error) {
@@ -158,11 +160,13 @@ async function sendFriendsStatusToUser(userId) {
 
     // Send each friend's online status to the user
     for (const friend of user.friends) {
-      ws.send(JSON.stringify({
-        type: 'status_update',
-        userId: friend._id.toString(),
-        isOnline: friend.isOnline
-      }));
+      ws.send(
+        JSON.stringify({
+          type: 'status_update',
+          userId: friend._id.toString(),
+          isOnline: friend.isOnline,
+        })
+      );
     }
   } catch (error) {
     console.error('Error sending friends status to user:', error);
@@ -184,11 +188,13 @@ async function broadcastStatusToFriends(userId, isOnline) {
     for (const friendId of user.friends) {
       const friendWs = clients.get(friendId.toString());
       if (friendWs && friendWs.readyState === friendWs.OPEN) {
-        friendWs.send(JSON.stringify({
-          type: 'status_update',
-          userId: userId,
-          isOnline: isOnline
-        }));
+        friendWs.send(
+          JSON.stringify({
+            type: 'status_update',
+            userId: userId,
+            isOnline: isOnline,
+          })
+        );
       }
     }
   } catch (error) {

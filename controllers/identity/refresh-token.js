@@ -1,5 +1,6 @@
 import { error, removeRefreshTokenCookie } from '@functions';
 import jwt from 'jsonwebtoken';
+import { Client } from '@models';
 
 export default async (req, res) => {
   const signedCookie = req.signedCookies[process.env.JWT_TOKEN_NAME];
@@ -20,6 +21,21 @@ export default async (req, res) => {
   delete payload.exp;
   delete payload.nbf;
   delete payload.jti;
+
+  // Get the userId from the payload
+  const userId = payload.me;
+
+  // Update the user's online status and last activity time
+  if (userId && payload.role === 'client') {
+    try {
+      await Client.findByIdAndUpdate(userId, {
+        isOnline: true,
+        lastActiveAt: new Date(),
+      });
+    } catch (err) {
+      console.error('Error updating user status during token refresh:', err);
+    }
+  }
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: '15m',

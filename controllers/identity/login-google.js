@@ -62,7 +62,15 @@ module.exports = async (req, res) => {
   });
 
   // Add last login information to the current user
-  await identity.updateOne({ lastLoginAt: Date.now() });
+  const updateData = { lastLoginAt: Date.now() };
+
+  // If user is a client, also update online status
+  if (role === 'client') {
+    updateData.isOnline = true;
+    updateData.lastActiveAt = new Date();
+  }
+
+  await identity.updateOne(updateData);
 
   return res.status(200).json({
     token,
