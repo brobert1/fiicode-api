@@ -47,6 +47,10 @@ const schema = new Schema({
   isOnline: {
     type: Boolean,
     default: false,
+  },
+  lastActiveAt: {
+    type: Date,
+    default: Date.now
   }
 });
 
