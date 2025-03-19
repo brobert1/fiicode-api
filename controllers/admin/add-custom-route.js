@@ -1,10 +1,10 @@
-/* eslint-disable no-console */
+import { error } from '@functions';
 import { CustomRoute } from '@models';
 
 export default async (req, res) => {
   const { me } = req.user;
   if (!me) {
-    console.log('Missing required params');
+    throw error(404, 'Missing required params');
   }
 
   const customRoute = await CustomRoute.create(req.body);
