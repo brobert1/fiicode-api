@@ -9,7 +9,7 @@ export default async (req, res) => {
 
   const identity = await Client.findById(me).populate({
     path: 'friends',
-    select: 'name email image lastLocation lastLoginAt isOnline'
+    select: 'name email image lastLocation lastActiveAt lastLoginAt isOnline',
   });
 
   if (!identity) {
