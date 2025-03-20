@@ -52,3 +52,12 @@ router.get('/client/friends', Client.listFriends);
 
 // Location
 router.put('/client/update-location', Client.updateLocation);
+
+// Chat - Conversations
+router.get('/client/conversations', Client.listConversations);
+router.post('/client/conversations', Client.createConversation);
+router.put('/client/conversations/:conversationId/read', Client.markConversationRead);
+
+// Chat - Messages
+router.get('/client/conversations/:conversationId/messages', Client.getMessages);
+router.post('/client/messages', Client.sendMessage);

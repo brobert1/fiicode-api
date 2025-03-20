@@ -13,3 +13,5 @@ export { default as Preference } from './preference';
 export { default as Reset } from './reset';
 export { default as FriendRequestNotification } from './friend-request-notification';
 export { default as AlertNotification } from './alert-notification';
+export { default as Conversation } from './conversation';
+export { default as Message } from './message';
