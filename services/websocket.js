@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Server } from 'ws';
 import jwt from 'jsonwebtoken';
-import { Client } from '../models';
+import { Client, Conversation, Message } from '../models';
 
 let wss;
 const clients = new Map(); // Map userId -> websocket connection
@@ -50,18 +50,55 @@ export const initWebSocketServer = (server) => {
       // Send initial online status to all friends
       await sendOnlineStatusToFriends(userId);
 
-      // Handle heartbeat messages
+      // Handle message type
       ws.on('message', async (message) => {
         try {
           const data = JSON.parse(message);
-          if (data.type === 'heartbeat') {
-            // Update last activity time
-            await Client.findByIdAndUpdate(userId, {
-              lastActiveAt: new Date(),
-            });
+
+          switch (data.type) {
+            case 'heartbeat':
+              // Update last activity time
+              await Client.findByIdAndUpdate(userId, {
+                lastActiveAt: new Date(),
+              });
+              break;
+
+            case 'location_update':
+              // Handle real-time location updates
+              if (data.location) {
+                // Update last location in database
+                await Client.findByIdAndUpdate(userId, {
+                  lastLocation: data.location,
+                });
+                // Broadcast location to friends
+                await broadcastLocationToFriends(userId, data.location);
+              }
+              break;
+
+            case 'read_messages':
+              // Mark messages as read in a conversation
+              if (data.conversationId) {
+                await handleReadMessages(userId, data.conversationId);
+              }
+              break;
+
+            case 'typing':
+              // Notify others that user is typing
+              if (data.conversationId) {
+                await notifyTyping(userId, data.conversationId, true);
+              }
+              break;
+
+            case 'stop_typing':
+              // Notify others that user stopped typing
+              if (data.conversationId) {
+                await notifyTyping(userId, data.conversationId, false);
+              }
+              break;
           }
         } catch (error) {
           // Ignore invalid messages
+          console.error('Invalid message received:', error);
         }
       });
 
@@ -116,6 +153,89 @@ async function checkInactiveUsers() {
     }
   } catch (error) {
     console.error('Error checking inactive users:', error);
+  }
+}
+
+/**
+ * Handle marking messages as read
+ * @param {string} userId - User marking messages as read
+ * @param {string} conversationId - Conversation ID
+ */
+async function handleReadMessages(userId, conversationId) {
+  try {
+    // Update unread messages
+    await Message.updateMany(
+      {
+        conversation: conversationId,
+        sender: { $ne: userId },
+        readBy: { $ne: userId }
+      },
+      {
+        $addToSet: { readBy: userId }
+      }
+    );
+
+    // Update conversation unread count
+    const conversation = await Conversation.findOne({
+      _id: conversationId,
+      participants: userId
+    });
+
+    if (conversation) {
+      const unreadCounts = conversation.unreadCounts || new Map();
+      unreadCounts.set(userId, 0);
+      await Conversation.updateOne(
+        { _id: conversationId },
+        { unreadCounts }
+      );
+
+      // Notify other participants
+      const otherParticipants = conversation.participants.filter(
+        p => p.toString() !== userId
+      );
+
+      for (const participantId of otherParticipants) {
+        sendToUser(participantId.toString(), {
+          type: 'messages_read',
+          conversationId,
+          readBy: userId
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Error marking messages as read:', error);
+  }
+}
+
+/**
+ * Notify participants that a user is typing
+ * @param {string} userId - The user who is typing
+ * @param {string} conversationId - The conversation
+ * @param {boolean} isTyping - Whether the user is typing or stopped typing
+ */
+async function notifyTyping(userId, conversationId, isTyping) {
+  try {
+    const conversation = await Conversation.findOne({
+      _id: conversationId,
+      participants: userId
+    });
+
+    if (!conversation) return;
+
+    // Notify other participants
+    const otherParticipants = conversation.participants.filter(
+      p => p.toString() !== userId
+    );
+
+    for (const participantId of otherParticipants) {
+      sendToUser(participantId.toString(), {
+        type: isTyping ? 'typing' : 'stop_typing',
+        conversationId,
+        userId
+      });
+    }
+  } catch (error) {
+    console.error('Error notifying typing status:', error);
   }
 }
 
@@ -199,6 +319,35 @@ async function broadcastStatusToFriends(userId, isOnline) {
     }
   } catch (error) {
     console.error('Error broadcasting status:', error);
+  }
+}
+
+/**
+ * Broadcast user's location to all their friends
+ * @param {string} userId - User ID
+ * @param {object} location - User's location {lat, lng}
+ */
+async function broadcastLocationToFriends(userId, location) {
+  try {
+    // Get user's friends
+    const user = await Client.findById(userId);
+    if (!user || !user.friends || !user.friends.length) return;
+
+    // Send location update to each connected friend
+    for (const friendId of user.friends) {
+      const friendWs = clients.get(friendId.toString());
+      if (friendWs && friendWs.readyState === friendWs.OPEN) {
+        friendWs.send(
+          JSON.stringify({
+            type: 'location_update',
+            userId: userId,
+            location: location,
+          })
+        );
+      }
+    }
+  } catch (error) {
+    console.error('Error broadcasting location to friends:', error);
   }
 }
 
