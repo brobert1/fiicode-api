@@ -7,7 +7,8 @@ export default async (req, res) => {
     throw error(404, 'Missing required params');
   }
 
-  const friendRequests = await FriendRequest.find({ to: me, status: 'pending' }).populate('from');
+  const received = await FriendRequest.find({ to: me, status: 'pending' }).sort({ createdAt: -1 }).populate('from');
+  const sent = await FriendRequest.find({ from: me, status: 'pending' }).sort({ createdAt: -1 }).populate('to');
 
-  res.status(201).json(friendRequests);
+  res.status(201).json({ received, sent });
 };

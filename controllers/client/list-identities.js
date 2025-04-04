@@ -13,11 +13,21 @@ export default async (req, res) => {
     throw error(404, 'Identity not found');
   }
 
+  // Find all identities with existing friend requests (either sent by me or received by me)
+  const friendRequests = await FriendRequest.find({
+    $or: [{ from: me }, { to: me }]
+  });
+
+  // Extract the IDs of identities with friend requests
+  const identitiesWithFriendRequests = friendRequests.map(request =>
+    request.from.toString() === me.toString() ? request.to : request.from
+  );
+
   const filter = identitiesFilters(req.query);
   const identities = await Client.find({
     _id: {
       $ne: me,
-      $nin: identity.friends || [] // Exclude identities that are already friends
+      $nin: [...(identity.friends || []), ...identitiesWithFriendRequests] // Exclude friends and identities with friend requests
     },
     ...filter
   });

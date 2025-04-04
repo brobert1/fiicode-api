@@ -2,6 +2,7 @@ export { default as account } from './account';
 export { default as addFavouritePlace } from './add-favourite-place';
 export { default as addPreferences } from './add-preferences';
 export { default as approveFriendRequest } from './approve-friend-request';
+export { default as cancelFriendRequest } from './cancel-friend-request';
 export { default as changePassword } from './change-password';
 export { default as createConversation } from './create-conversation';
 export { default as getFavouritePlaces } from './get-favourite-places';

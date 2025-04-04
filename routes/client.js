@@ -46,6 +46,7 @@ router.get('/client/friend-requests', Client.listFriendRequests);
 router.post('/client/send-friend-request', Client.sendFriendRequest);
 router.put('/client/approve-friend-request/:id', Client.approveFriendRequest);
 router.delete('/client/reject-friend-request/:id', Client.rejectFriendRequest);
+router.delete('/client/cancel-friend-request/:id', Client.cancelFriendRequest);
 
 // Friends
 router.get('/client/friends', Client.listFriends);
