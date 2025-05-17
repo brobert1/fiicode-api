@@ -25,6 +25,9 @@ router.use(routes.admin);
 router.use(routes.client);
 router.use(routes.clientError);
 router.use(routes.identity);
+router.use(routes.document);
+router.use(routes.chat);
+router.use(routes.avatar);
 router.use(routes.public);
 // Matches any other HTTP method and route not matched before
 router.all('*', middleware.notFound);
