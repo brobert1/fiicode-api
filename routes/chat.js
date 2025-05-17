@@ -3,6 +3,6 @@ import { Router } from 'express';
 
 const router = Router();
 
-router.post('/admin/chat/chat-rag', Chat.chatRag);
+router.post('/client/chat/chat-rag', Chat.chatRag);
 
 export default router;
