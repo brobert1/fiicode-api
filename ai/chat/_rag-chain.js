@@ -5,51 +5,151 @@ import prompt from './_prompt.js';
 import formatDocumentsAsString from 'ai/functions/format-documents-as-string.js';
 import formatDocumentsAsStringsWithDates from 'ai/functions/format-documents-as-strings-with-dates.js';
 import vectorStore from 'ai/vector-store/_vector-store.js';
-import { ScoreThresholdRetriever } from 'langchain/retrievers/score_threshold';
+import queryDatabase from '../functions/query-database.js';
+import storeNewQuestion from '../functions/store-new-question.js';
+
+// Import modular components
+import { isNavigationQuestion, processNavigationQuery } from './utils/navigation.js';
+import {
+  getUserData,
+  getBadgeProgressionData,
+  getUserRoutesData,
+  getModelData,
+} from './utils/database-query.js';
+import { sanitizeData } from './utils/sanitize.js';
+import { buildCompleteContext } from './utils/context-builder.js';
 
 const PRIORITY_NUM_RESULTS = 3;
 const NUM_RESULTS = 6;
 
-const chain = async (question, answerSize) => {
-  const llm = new ChatOpenAI({ model: 'o3-mini' });
+const chain = async (question, answerSize, authenticatedUser, previousContext = null) => {
+  const llm = new ChatOpenAI({
+    model: 'gpt-4o',
+    temperature: 0.7,
+    max_tokens: 4096
+  });
+  let databaseContext = '';
+  let highestSimilarityScore = 0;
 
-  // filter to only retrieve documents with tag "feed"
+  // Determine if this is a navigation question
+  const isNavigation = isNavigationQuestion(question);
+
+  // Process navigation query if applicable
+  if (isNavigation) {
+    const navigationContext = await processNavigationQuery(
+      question,
+      authenticatedUser,
+      queryDatabase
+    );
+    databaseContext += navigationContext;
+  }
+
+  // Get vector store context with similarity scores
   const withFeedFilter = { tag: 'feed' };
 
-  const priorityRetriever = ScoreThresholdRetriever.fromVectorStore(vectorStore, {
-    minSimilarityScore: 0.7, // Minimum similarity threshold
-    maxK: PRIORITY_NUM_RESULTS, // Maximum number of documents to return
-    kIncrement: 2, // How much to increase K by each time
-    filter: withFeedFilter, // Your existing filter
-  });
+  // Create custom retrievers that will give us back the similarity scores
+  const retrieveWithScores = async (query, filter, maxResults) => {
+    // Using vectorStore.similaritySearchWithScore directly to get scores
+    const results = await vectorStore.similaritySearchWithScore(
+      query,
+      maxResults,
+      filter
+    );
 
-  const docsRetriever = ScoreThresholdRetriever.fromVectorStore(vectorStore, {
-    minSimilarityScore: 0.7,
-    maxK: NUM_RESULTS,
-    kIncrement: 2,
-    filter: { tag: { $ne: 'feed' } },
-  });
+    // Track highest similarity score
+    if (results.length > 0) {
+      // Results come back as [doc, score] pairs
+      const scores = results.map(item => item[1]);
+      const currentHighest = Math.max(...scores);
 
-  const priorityDocs = await priorityRetriever.getRelevantDocuments(question);
-  const docs = await docsRetriever.getRelevantDocuments(question);
+      if (currentHighest > highestSimilarityScore) {
+        highestSimilarityScore = currentHighest;
+      }
+    }
+
+    // Return just the documents for compatibility with existing code
+    return results.map(item => item[0]);
+  };
+
+  // Use our custom retrieval functions
+  const priorityDocs = await retrieveWithScores(
+    question,
+    withFeedFilter,
+    PRIORITY_NUM_RESULTS
+  );
+
+  const docs = await retrieveWithScores(
+    question,
+    { tag: { $ne: 'feed' } },
+    NUM_RESULTS
+  );
+
   const priorityContextString = formatDocumentsAsStringsWithDates(priorityDocs);
   const documentsContextString = formatDocumentsAsString(docs);
 
-  const completeContext = `
-  These are various articles from the support section of the website.
-  <articles>
-  ${documentsContextString}
-  </articles>
+  // Get database context from various sources
+  try {
+    // Get the keyword string for querying
+    const keywords = question.toLowerCase();
 
-  These are updates offered by the admins which may impact the initial articles. Each update has a date and time for you to discern the most recent information.
-  <updates>
-  ${priorityContextString}
-  </updates>
+    // Get user-specific data if authenticated
+    if (authenticatedUser) {
+      // Get basic user data
+      const userContext = await getUserData(authenticatedUser, queryDatabase, sanitizeData);
+      databaseContext += userContext;
 
-  Answer the question using the initial presented articles and the updates.
-  `;
+      // If we have user data and it includes XP, get badge progression
+      if (userContext && userContext.includes('"xp"')) {
+        const userXp = JSON.parse(userContext.match(/"xp"\s*:\s*(\d+)/)[1]);
 
-  // Build a chain that uses the context from the filtered documents.
+        // If question is about XP, badges, etc.
+        if (
+          keywords.includes('xp') ||
+          keywords.includes('badge') ||
+          keywords.includes('level') ||
+          keywords.includes('progress') ||
+          keywords.includes('achievement')
+        ) {
+          const badgeContext = await getBadgeProgressionData(
+            authenticatedUser,
+            queryDatabase,
+            sanitizeData,
+            userXp
+          );
+          databaseContext += badgeContext;
+        }
+      }
+
+      // If question is about routes
+      if (keywords.includes('route') || keywords.includes('travel') || keywords.includes('path')) {
+        const routesContext = await getUserRoutesData(
+          authenticatedUser,
+          queryDatabase,
+          sanitizeData
+        );
+        databaseContext += routesContext;
+      }
+    }
+
+    // Get general model data based on keywords
+    const modelContext = await getModelData(keywords, queryDatabase, sanitizeData);
+    databaseContext += modelContext;
+  } catch (error) {
+    console.error('Error querying database or external APIs:', error);
+    databaseContext +=
+      '\n<database-error>Failed to retrieve database or external API information</database-error>';
+  }
+
+  // Build the complete context
+  const completeContext = buildCompleteContext(
+    isNavigation,
+    databaseContext,
+    documentsContextString,
+    priorityContextString,
+    previousContext
+  );
+
+  // Build a chain that uses the context
   const ragChainFromDocs = RunnableSequence.from([
     RunnablePassthrough.assign({
       context: () => completeContext,
@@ -60,14 +160,24 @@ const chain = async (question, answerSize) => {
     new StringOutputParser(),
   ]);
 
-  // Build the overall chain.
+  // Build the overall chain
   let ragChainWithSource = new RunnableMap({
     steps: {
       question: new RunnablePassthrough(),
       answerSize: new RunnablePassthrough(),
     },
   });
-  ragChainWithSource = ragChainWithSource.assign({ answer: ragChainFromDocs });
+  ragChainWithSource = ragChainWithSource.assign({
+    answer: ragChainFromDocs,
+    // Add a hidden property that will be used to store new questions
+    _storeNewQuestion: async (output) => {
+      // After generating the answer, store the Q&A pair if confidence was low
+      if (!isNavigation) { // Don't store navigation questions as they're dynamic
+        await storeNewQuestion(question, output.answer, highestSimilarityScore);
+      }
+      return true; // Just a placeholder value
+    }
+  });
 
   return ragChainWithSource;
 };

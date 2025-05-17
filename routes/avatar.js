@@ -3,6 +3,6 @@ import { Router } from 'express';
 
 const router = Router();
 
-router.post('/admin/avatar/get-access-token', Avatar.getAccessToken);
+router.post('/client/avatar/get-access-token', Avatar.getAccessToken);
 
 export default router;
