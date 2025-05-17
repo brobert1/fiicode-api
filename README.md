@@ -13,12 +13,6 @@
 
 ---
 
-## 🌐 Live Application
-
-- **App Link:** [![Visit App](https://img.shields.io/badge/Live%20App-Pathly-blue?logo=google-chrome)](https://pathly-w8x2r.ondigitalocean.app/)
-
----
-
 ## 🔑 Test the Application
 
 You can explore Pathly easily by signing in with **Google**.
