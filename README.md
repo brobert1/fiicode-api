@@ -9,7 +9,7 @@
 
 ## 📽️ Project Presentation
 
-- **Video Demo:** [![Watch the video](https://img.shields.io/badge/Watch%20Video-YouTube-red?logo=youtube)](https://www.youtube.com/watch?v=1zm5y4Eg18g)
+- **Video Demo FINALA :** [![Watch the video](https://img.shields.io/badge/Watch%20Video-YouTube-red?logo=youtube)]([https://www.youtube.com/watch?v=1zm5y4Eg18g](https://youtu.be/7wObVlTwv8Y))
 
 ## 🌐 Live Application
 
