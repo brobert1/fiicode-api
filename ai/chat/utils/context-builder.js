@@ -6,6 +6,25 @@
  * Build navigation-focused context
  */
 export const buildNavigationContext = (databaseContext) => {
+  // Check if this is a traffic-related query
+  const isTrafficQuery = databaseContext && databaseContext.includes('<traffic-info>');
+
+  if (isTrafficQuery) {
+    return `
+    This is a traffic-related question in Romania.
+    ${databaseContext}
+
+    When providing traffic information:
+    1. Clearly describe the current traffic conditions in simple terms
+    2. Compare the traffic level to normal conditions for that area (if known)
+    3. Suggest alternative routes or times if traffic is heavy
+    4. Provide estimated travel times with traffic considerations
+    5. Mention any nearby streets or areas that might also be affected
+
+    You may also leverage your general knowledge about Romanian road systems, typical traffic patterns, and local driving conditions beyond the specific information provided.
+    `;
+  }
+
   return `
   This is a navigation-related question in Romania.
   ${
@@ -60,6 +79,9 @@ export const buildCompleteContext = (
   priorityContextString,
   previousContext = null
 ) => {
+  // Check if this is specifically a traffic-related query
+  const isTrafficQuery = databaseContext && databaseContext.includes('<traffic-info>');
+
   const contextBody = isNavigation
     ? buildNavigationContext(databaseContext)
     : buildGeneralContext(documentsContextString, priorityContextString, databaseContext);
@@ -69,7 +91,9 @@ export const buildCompleteContext = (
   ${previousContext ? `<previous-context>\n${previousContext}\n</previous-context>` : ''}
 
   Answer the question thoroughly yet efficiently, focusing on ${
-    isNavigation
+    isTrafficQuery
+      ? 'providing accurate traffic information for the specified location in Romania'
+      : isNavigation
       ? 'providing accurate navigation information for Romania'
       : 'the information from the knowledge base'
   }.

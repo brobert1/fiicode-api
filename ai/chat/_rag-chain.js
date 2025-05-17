@@ -10,8 +10,11 @@ import storeNewQuestion from '../functions/store-new-question.js';
 
 // Import modular components
 import { isNavigationQuestion, processNavigationQuery } from './utils/navigation.js';
+import { isPlaceQuery, processPlaceQuery } from './utils/places.js';
 import {
   getUserData,
+  getUserFriendsData,
+  getUserAlertsData,
   getBadgeProgressionData,
   getUserRoutesData,
   getModelData,
@@ -33,6 +36,7 @@ const chain = async (question, answerSize, authenticatedUser, previousContext = 
 
   // Determine if this is a navigation question
   const isNavigation = isNavigationQuestion(question);
+  const isPlace = isPlaceQuery(question);
 
   // Process navigation query if applicable
   if (isNavigation) {
@@ -42,6 +46,16 @@ const chain = async (question, answerSize, authenticatedUser, previousContext = 
       queryDatabase
     );
     databaseContext += navigationContext;
+  }
+
+  // Process place query if applicable (opening hours, schedules, etc.)
+  if (isPlace) {
+    const placeContext = await processPlaceQuery(
+      question,
+      authenticatedUser,
+      queryDatabase
+    );
+    databaseContext += placeContext;
   }
 
   // Get vector store context with similarity scores
@@ -129,6 +143,45 @@ const chain = async (question, answerSize, authenticatedUser, previousContext = 
         );
         databaseContext += routesContext;
       }
+
+      // If question is about friends
+      if (
+        keywords.includes('friend') ||
+        keywords.includes('contact') ||
+        keywords.includes('connection') ||
+        keywords.includes('social') ||
+        keywords.includes('request') ||
+        keywords.includes('add') ||
+        keywords.includes('people') ||
+        keywords.includes('connections')
+      ) {
+        const friendsContext = await getUserFriendsData(
+          authenticatedUser,
+          queryDatabase,
+          sanitizeData
+        );
+        databaseContext += friendsContext;
+      }
+
+      // If question is about alerts or notifications
+      if (
+        keywords.includes('alert') ||
+        keywords.includes('notification') ||
+        keywords.includes('notify') ||
+        keywords.includes('message') ||
+        keywords.includes('unread') ||
+        keywords.includes('update') ||
+        keywords.includes('announce') ||
+        keywords.includes('warning') ||
+        keywords.includes('notice')
+      ) {
+        const alertsContext = await getUserAlertsData(
+          authenticatedUser,
+          queryDatabase,
+          sanitizeData
+        );
+        databaseContext += alertsContext;
+      }
     }
 
     // Get general model data based on keywords
@@ -142,7 +195,7 @@ const chain = async (question, answerSize, authenticatedUser, previousContext = 
 
   // Build the complete context
   const completeContext = buildCompleteContext(
-    isNavigation,
+    isNavigation || isPlace, // Treat place queries like navigation for context building
     databaseContext,
     documentsContextString,
     priorityContextString,
@@ -172,7 +225,7 @@ const chain = async (question, answerSize, authenticatedUser, previousContext = 
     // Add a hidden property that will be used to store new questions
     _storeNewQuestion: async (output) => {
       // After generating the answer, store the Q&A pair if confidence was low
-      if (!isNavigation) { // Don't store navigation questions as they're dynamic
+      if (!isNavigation && !isPlace) { // Don't store navigation or place questions as they're dynamic
         await storeNewQuestion(question, output.answer, highestSimilarityScore);
       }
       return true; // Just a placeholder value
