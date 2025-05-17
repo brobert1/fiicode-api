@@ -9,7 +9,9 @@
 
 ## 📽️ Project Presentation
 
-- **Video Demo FINALA :** [![Watch the video](https://img.shields.io/badge/Watch%20Video-YouTube-red?logo=youtube)]([https://www.youtube.com/watch?v=1zm5y4Eg18g](https://youtu.be/7wObVlTwv8Y))
+- **Video Demo FINALA:** [![Watch the video](https://img.shields.io/badge/Watch%20Video-YouTube-red?logo=youtube)](https://youtu.be/7wObVlTwv8Y)
+
+---
 
 ## 🌐 Live Application
 
@@ -21,6 +23,6 @@
 
 You can explore Pathly easily by signing in with **Google**.
 
-To test the **admin** functionalities, use the following credentials:
-Email: michael@email.com
-Password: supersecretpassword
+To test the **admin** functionalities, use the following credentials:  
+**Email:** michael@email.com  
+**Password:** supersecretpassword
