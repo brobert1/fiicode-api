@@ -62,3 +62,6 @@ router.put('/client/conversations/:conversationId/read', Client.markConversation
 // Chat - Messages
 router.get('/client/conversations/:conversationId/messages', Client.getMessages);
 router.post('/client/messages', Client.sendMessage);
+
+// Noise Pollution
+router.post('/client/validate-noise-pollution', Client.validateNoisePollution);

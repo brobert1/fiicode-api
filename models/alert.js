@@ -24,7 +24,10 @@ const schema = new Schema(
     },
     type: {
       type: String,
-      enum: ['accident', 'construction', 'congestion', 'other'],
+      enum: ['accident', 'construction', 'congestion', 'other', 'noise'],
+    },
+    noiseLevel: {
+      type: Number,
     },
     expiresAt: {
       type: Date,

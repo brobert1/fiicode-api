@@ -26,3 +26,4 @@ export { default as setFCMToken } from './set-fcm-token';
 export { default as updateAccount } from './update-account';
 export { default as updateLocation } from './update-location';
 export { default as uploadImage } from './upload-image';
+export { default as validateNoisePollution } from './validate-noise-pollution';
